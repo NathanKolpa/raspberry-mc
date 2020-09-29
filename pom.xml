@@ -10,6 +10,7 @@
     <modules>
         <module>raspberry-mc-api</module>
         <module>raspberry-mc-spigot</module>
+        <module>raspberry-mc-lib</module>
     </modules>
     <packaging>pom</packaging>
 
