@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @org.springframework.web.bind.annotation.RestController
 public class RestController
 {
-	private UnitOfWorkFactory unitOfWorkFactory;
+	private final UnitOfWorkFactory unitOfWorkFactory;
 
 	private RestController()
 	{

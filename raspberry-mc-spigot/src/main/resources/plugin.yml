@@ -1,4 +1,0 @@
-name: Raspberry Mc
-version: ${project.version}
-main: me.kolpa.raspberrymc.RaspberryMc
-api-version: 1.16
