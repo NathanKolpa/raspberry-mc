@@ -10,7 +10,7 @@ public abstract class InMemoryPinRepository<T extends Pin> extends InMemoryRepos
 	@Override
 	public T getById(int id)
 	{
-		return getValues().stream().filter(x -> x.getPinId() == id).findFirst().get();
+		return getValues().stream().filter(x -> x.getPinId() == id).findFirst().orElse(null);
 	}
 
 	@Override
