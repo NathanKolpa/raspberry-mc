@@ -1,6 +1,5 @@
 package me.kolpa.raspberrymclib.impl.repository.inmemory.domain;
 
-import me.kolpa.raspberrymclib.core.model.GpioPin;
 import me.kolpa.raspberrymclib.core.model.Pin;
 
 public abstract class InMemoryPinRepository<T extends Pin> extends InMemoryRepository<T>

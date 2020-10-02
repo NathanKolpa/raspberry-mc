@@ -3,17 +3,16 @@ package me.kolpa.raspberryapi.controllers;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import me.kolpa.raspberryapi.dto.GpioPinDto;
 import me.kolpa.raspberrymclib.core.model.GpioPin;
-import me.kolpa.raspberrymclib.core.model.PinState;
 import me.kolpa.raspberrymclib.core.repository.UnitOfWork;
 import me.kolpa.raspberrymclib.core.repository.UnitOfWorkFactory;
 import me.kolpa.raspberrymclib.impl.repository.inmemory.InMemoryUnitOfWorkFactory;
-import me.kolpa.raspberrymclib.impl.repository.inmemory.domain.InMemoryGpioRepository;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @org.springframework.web.bind.annotation.RestController
