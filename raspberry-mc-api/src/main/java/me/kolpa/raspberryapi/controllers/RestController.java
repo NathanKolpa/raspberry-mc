@@ -28,7 +28,7 @@ public class RestController
 
 		for (int i = 0; i < 7; i++)
 		{
-			memoryUnitOfWorkFactory.getGpioRepository().add(new GpioPin(i, PinState.Low));
+			memoryUnitOfWorkFactory.getGpioRepository().add(new GpioPin(i, 0));
 		}
 	}
 
@@ -60,8 +60,8 @@ public class RestController
 
 	public static class UpdateRequest
 	{
-		@JsonProperty("pin_state")
-		public String pinState;
+		@JsonProperty("input_strength")
+		public int strength;
 	}
 
 	@PutMapping("/gpio-pins/{pinId}")
@@ -73,17 +73,16 @@ public class RestController
 
 			if (gpioPin == null)
 				return ResponseEntity.notFound().build();
-
-			PinState newState;
-			switch (body.pinState)
+			
+			try
 			{
-				case "HIGH": newState = PinState.High; break;
-				case "LOW": newState = PinState.Low; break;
-				default:
-					return ResponseEntity.unprocessableEntity().build();
+				gpioPin.setInputSignalLevel(body.strength);
+			}
+			catch (IllegalArgumentException e)
+			{
+				return ResponseEntity.unprocessableEntity().build();
 			}
 			
-			gpioPin.setPinState(newState);
 
 			return ResponseEntity.ok(new GpioPinDto(gpioPin));
 		}

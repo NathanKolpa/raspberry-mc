@@ -1,4 +1,4 @@
-name: Raspberry Mc Spigot
+name: RaspberryMcSpigot
 version: ${project.version}
 main: me.kolpa.raspberrymcspigot.RaspberryMcSpigot
 api-version: 1.16

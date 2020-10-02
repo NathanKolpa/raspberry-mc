@@ -2,21 +2,32 @@ package me.kolpa.raspberrymclib.core.model;
 
 public class GpioPin extends Pin
 {
-	private PinState pinState;
+	private int inputSignalLevel = 0;
 	
-	public GpioPin(int pinNumber, PinState pinState)
+	public GpioPin(int pinNumber, int inputSignalLevel)
 	{
 		super(pinNumber);
-		setPinState(pinState);
+		setInputSignalLevel(inputSignalLevel);
 	}
 
 	public PinState getPinState()
 	{
-		return pinState;
+		if(inputSignalLevel > 0)
+			return PinState.High;
+		
+		return PinState.Low;
 	}
 
-	public void setPinState(PinState pinState)
+	public int getInputSignalLevel()
 	{
-		this.pinState = pinState;
+		return inputSignalLevel;
+	}
+
+	public void setInputSignalLevel(int inputSignalLevel)
+	{
+		if(inputSignalLevel > 15 || inputSignalLevel < 0)
+			throw new IllegalArgumentException();
+		
+		this.inputSignalLevel = inputSignalLevel;
 	}
 }

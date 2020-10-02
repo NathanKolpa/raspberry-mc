@@ -8,11 +8,13 @@ public class GpioPinDto
 	private int id;
 	private String pinState;
 	private int pinNumber;
+	private int inputStrength;
 	
 	public GpioPinDto(GpioPin gpioPin)
 	{
 		id = gpioPin.getPinId();
 		pinNumber = gpioPin.getPinNumber();
+		inputStrength = gpioPin.getInputSignalLevel();
 		
 		switch (gpioPin.getPinState())
 		{
@@ -37,5 +39,11 @@ public class GpioPinDto
 	public int getPinNumber()
 	{
 		return pinNumber;
+	}
+
+	@JsonProperty("input_strength")
+	public int getInputStrength()
+	{
+		return inputStrength;
 	}
 }
