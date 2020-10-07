@@ -3,7 +3,6 @@ package me.kolpa.raspberrymcspigot;
 import me.kolpa.raspberrymclib.core.model.GpioPin;
 import me.kolpa.raspberrymcspigot.repository.GpioBlockRepository;
 import me.kolpa.raspberrymcspigot.world.GpioBlock;
-import me.kolpa.raspberrymcspigot.world.SavedBlock;
 
 import java.util.List;
 
@@ -58,7 +57,7 @@ public class RaspberryController
 		blocks.save();
 	}
 
-	public void updateBlock(SavedBlock block)
+	public void updateBlock(GpioBlock block)
 	{
 		GpioPin pin = getGpioPinByNumber(block.getPin());
 		pin.setInputSignalLevel(block.getBlockPower());

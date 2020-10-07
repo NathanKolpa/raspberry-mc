@@ -1,7 +1,6 @@
 package me.kolpa.raspberrymcspigot.repository;
 
 import me.kolpa.raspberrymcspigot.world.GpioBlock;
-import me.kolpa.raspberrymcspigot.world.SavedBlock;
 
 import java.util.List;
 

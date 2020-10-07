@@ -3,7 +3,6 @@ package me.kolpa.raspberrymcspigot.impl;
 import com.google.gson.Gson;
 import me.kolpa.raspberrymcspigot.repository.GpioBlockRepository;
 import me.kolpa.raspberrymcspigot.world.GpioBlock;
-import me.kolpa.raspberrymcspigot.world.SavedBlock;
 import me.kolpa.raspberrymcspigot.world.PinSign;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -85,7 +84,7 @@ public class FileGpioBlockRepository implements GpioBlockRepository
 		JsonRoot root = new JsonRoot();
 		root.blocks = new ArrayList<>();
 
-		for (SavedBlock block : values)
+		for (GpioBlock block : values)
 		{
 			JsonBlockRoot blockRoot = new JsonBlockRoot();
 			blockRoot.pin = block.getPin();
@@ -99,7 +98,7 @@ public class FileGpioBlockRepository implements GpioBlockRepository
 		return root;
 	}
 
-	private JsonBlock mapToBlock(SavedBlock.BlockPosition position)
+	private JsonBlock mapToBlock(GpioBlock.BlockPosition position)
 	{
 		JsonBlock block = new JsonBlock();
 		block.x = position.x;
