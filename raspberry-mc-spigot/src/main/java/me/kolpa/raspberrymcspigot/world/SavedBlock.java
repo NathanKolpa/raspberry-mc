@@ -2,7 +2,7 @@ package me.kolpa.raspberrymcspigot.world;
 
 import org.bukkit.block.Block;
 
-public class SavedBlock
+public abstract class SavedBlock
 {
 	public static class BlockPosition
 	{
@@ -67,7 +67,7 @@ public class SavedBlock
 		return mapPosition(signBlock);
 	}
 	
-	private BlockPosition mapPosition(Block block)
+	protected BlockPosition mapPosition(Block block)
 	{
 		BlockPosition position = new BlockPosition();
 		position.x = block.getX();

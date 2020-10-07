@@ -18,14 +18,14 @@ public class RedstoneListener implements Listener
 	}
 
 	@EventHandler
-	public void onBlockRedstone(BlockRedstoneEvent event)
+	public void onRedstoneLampUpdate(BlockRedstoneEvent event)
 	{
 		if(event.getBlock().getType() != Material.REDSTONE_LAMP)
 			return;
 
-		List<SavedBlock> blocks = controller.getBlocks();
+		List<GpioBlock> blocks = controller.getBlocks();
 		
-		for(SavedBlock block : blocks)
+		for(GpioBlock block : blocks)
 		{
 			if(!block.isSame(event.getBlock()))
 				continue;

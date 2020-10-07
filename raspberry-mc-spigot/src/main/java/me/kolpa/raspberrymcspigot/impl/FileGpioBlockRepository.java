@@ -2,6 +2,7 @@ package me.kolpa.raspberrymcspigot.impl;
 
 import com.google.gson.Gson;
 import me.kolpa.raspberrymcspigot.repository.GpioBlockRepository;
+import me.kolpa.raspberrymcspigot.world.GpioBlock;
 import me.kolpa.raspberrymcspigot.world.SavedBlock;
 import me.kolpa.raspberrymcspigot.world.PinSign;
 import org.bukkit.Bukkit;
@@ -18,22 +19,22 @@ public class FileGpioBlockRepository implements GpioBlockRepository
 	private static Gson gson = new Gson();
 	public static File dataFile = new File("plugins/raspberry-mc/saved_blocks.json");
 
-	private ArrayList<SavedBlock> values = new ArrayList<>();
+	private ArrayList<GpioBlock> values = new ArrayList<>();
 
 	@Override
-	public void add(SavedBlock block)
+	public void add(GpioBlock block)
 	{
 		values.add(block);
 	}
 
 	@Override
-	public void remove(SavedBlock block)
+	public void remove(GpioBlock block)
 	{
 		values.remove(block);
 	}
 
 	@Override
-	public List<SavedBlock> getAll()
+	public List<GpioBlock> getAll()
 	{
 		return new ArrayList<>(values);
 	}
@@ -70,7 +71,7 @@ public class FileGpioBlockRepository implements GpioBlockRepository
 				Block sign = world.getBlockAt(blockRoot.sign.x, blockRoot.sign.y, blockRoot.sign.z);
 				PinSign pinSign = new PinSign(blockRoot.pin);
 
-				values.add(new SavedBlock(block, pinSign, sign));
+				values.add(new GpioBlock(block, pinSign, sign));
 			}
 		}
 		catch (Exception e)

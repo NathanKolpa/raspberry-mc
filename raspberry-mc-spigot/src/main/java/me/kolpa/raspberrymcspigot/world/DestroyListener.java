@@ -24,10 +24,10 @@ public class DestroyListener implements Listener
 		if(event.getBlock().getType() != Material.REDSTONE_LAMP && !Tag.SIGNS.isTagged(event.getBlock().getType()))
 			return;
 
-		List<SavedBlock> blocks = controller.getBlocks();
-		SavedBlock blockToRemove = null;
+		List<GpioBlock> blocks = controller.getBlocks();
+		GpioBlock blockToRemove = null;
 		
-		for(SavedBlock block : blocks)
+		for(GpioBlock block : blocks)
 		{
 			if(block.isSame(event.getBlock()))
 			{

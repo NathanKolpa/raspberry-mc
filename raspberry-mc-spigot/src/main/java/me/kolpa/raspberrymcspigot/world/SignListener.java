@@ -47,7 +47,7 @@ public class SignListener implements Listener
 	{
 		PinSign pinSign = PinSign.fromData(signData);
 		
-		controller.addBlock(new SavedBlock(block, pinSign, sing));
+		controller.addBlock(new GpioBlock(block, pinSign, sing));
 
 		String[] lines = pinSign.createColorText();
 		setSignText(event, lines);

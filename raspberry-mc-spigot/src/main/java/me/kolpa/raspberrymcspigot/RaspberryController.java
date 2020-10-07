@@ -2,6 +2,7 @@ package me.kolpa.raspberrymcspigot;
 
 import me.kolpa.raspberrymclib.core.model.GpioPin;
 import me.kolpa.raspberrymcspigot.repository.GpioBlockRepository;
+import me.kolpa.raspberrymcspigot.world.GpioBlock;
 import me.kolpa.raspberrymcspigot.world.SavedBlock;
 
 import java.util.List;
@@ -24,9 +25,9 @@ public class RaspberryController
 		pins = raspberry.getPins();
 	}
 
-	public void addBlock(SavedBlock block)
+	public void addBlock(GpioBlock block)
 	{
-		for(SavedBlock b : blocks.getAll())
+		for(GpioBlock b : blocks.getAll())
 		{
 			if(b.getPin() == block.getPin() || b.isSame(block))
 			{
@@ -51,7 +52,7 @@ public class RaspberryController
 		block.getSign().setHasValidPin(false);
 	}
 
-	public void removeBlock(SavedBlock block)
+	public void removeBlock(GpioBlock block)
 	{
 		blocks.remove(block);
 		blocks.save();
@@ -70,7 +71,7 @@ public class RaspberryController
 		blocks.save();
 	}
 	
-	public List<SavedBlock> getBlocks()
+	public List<GpioBlock> getBlocks()
 	{
 		return blocks.getAll();
 	}
