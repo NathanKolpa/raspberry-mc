@@ -1,18 +1,24 @@
-package me.kolpa.raspberrymcspigot;
+package me.kolpa.raspberrymcspigot.world;
 
 import org.bukkit.ChatColor;
 
-public class GpioSign
+public class PinSign
 {
+	public void setValid(boolean valid)
+	{
+		isValid = valid;
+	}
+
+	private boolean isValid = true;
 	private boolean hasValidPin = true;
 	private int pin;
 
-	public GpioSign(int pin)
+	public PinSign(int pin)
 	{
 		this.pin = pin;
 	}
 	
-	public static GpioSign fromData(SignData data)
+	public static PinSign fromData(SignData data)
 	{
 		int pin;
 		
@@ -22,12 +28,22 @@ public class GpioSign
 		}
 		catch (Exception e)
 		{
-			GpioSign gpioSign = new GpioSign(-1);
-			gpioSign.hasValidPin = false;
-			return gpioSign;
+			PinSign pinSign = new PinSign(-1);
+			pinSign.hasValidPin = false;
+			return pinSign;
 		}
 		
-		return new GpioSign(pin);
+		return new PinSign(pin);
+	}
+	
+	public int getPin()
+	{
+		return pin;
+	}
+	
+	public void setHasValidPin(boolean hasValidPin)
+	{
+		this.hasValidPin = hasValidPin;
 	}
 
 	public String[] createColorText()
@@ -46,7 +62,7 @@ public class GpioSign
 	
 	public boolean isValid()
 	{
-		return hasValidPin;
+		return hasValidPin && isValid;
 	}
 	
 	private ChatColor getStatusColor()

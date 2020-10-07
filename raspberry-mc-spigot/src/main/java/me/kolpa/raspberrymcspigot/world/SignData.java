@@ -1,8 +1,5 @@
-package me.kolpa.raspberrymcspigot;
+package me.kolpa.raspberrymcspigot.world;
 
-import org.bukkit.ChatColor;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 

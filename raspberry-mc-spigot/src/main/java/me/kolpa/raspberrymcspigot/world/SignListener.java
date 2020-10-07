@@ -1,5 +1,6 @@
-package me.kolpa.raspberrymcspigot;
+package me.kolpa.raspberrymcspigot.world;
 
+import me.kolpa.raspberrymcspigot.RaspberryController;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -11,6 +12,13 @@ import org.bukkit.event.block.SignChangeEvent;
 
 public class SignListener implements Listener
 {
+	private RaspberryController controller;
+
+	public SignListener(RaspberryController controller)
+	{
+		this.controller = controller;
+	}
+
 	@EventHandler
 	public void onSignChange(SignChangeEvent e)
 	{
@@ -30,16 +38,18 @@ public class SignListener implements Listener
 		switch (data.getHeader())
 		{
 			case "gpio":
-				handleGpio(e, data);
+				handleGpio(e, attachedBlock, e.getBlock(), data);
 				break;
 		}
 	}
 
-	private void handleGpio(SignChangeEvent event,  SignData signData)
+	private void handleGpio(SignChangeEvent event, Block block, Block sing, SignData signData)
 	{
-		GpioSign gpioSign = GpioSign.fromData(signData);
+		PinSign pinSign = PinSign.fromData(signData);
 		
-		String[] lines = gpioSign.createColorText();
+		controller.addBlock(new SavedBlock(block, pinSign, sing));
+
+		String[] lines = pinSign.createColorText();
 		setSignText(event, lines);
 	}
 	
