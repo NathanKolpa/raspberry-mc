@@ -37,10 +37,11 @@ public class HttpRaspberry implements Raspberry
 	@Override
 	public void updatePin(GpioPin pin)
 	{
-		Bukkit.getScheduler().runTask(plugin, () ->
+		Bukkit.getScheduler().runTaskAsynchronously(plugin, () ->
 		{
 			try
 			{
+				HttpClient httpClient = HttpClientBuilder.create().build();
 				HttpPut putRequest = new HttpPut("http://localhost:8080/gpio-pins/" + pin.getPinId());
 				StringEntity params = new StringEntity("{\"input_strength\":" + pin.getInputSignalLevel() + "}", ContentType.APPLICATION_JSON);
 				putRequest.setEntity(params);
