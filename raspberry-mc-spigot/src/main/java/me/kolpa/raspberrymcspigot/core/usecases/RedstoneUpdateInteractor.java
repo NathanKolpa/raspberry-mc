@@ -27,7 +27,6 @@ public class RedstoneUpdateInteractor
 		if(outputPinStructure == null)
 			return;
 		
-		
 		outputPinStructure.update();
 	}
 }

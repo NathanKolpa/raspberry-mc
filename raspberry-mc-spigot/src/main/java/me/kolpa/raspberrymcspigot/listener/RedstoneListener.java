@@ -24,10 +24,12 @@ public class RedstoneListener implements Listener
 	
 	//TODO: update on redstone signal change
 	@EventHandler
-	private void onRedstoneUpdate(BlockRedstoneEvent event)
+	public void onRedstoneUpdate(BlockRedstoneEvent event)
 	{
 		if (event.getBlock().getType() != Material.REDSTONE_LAMP)
 			return;
+		
+		System.out.println(1);
 
 		Block block = event.getBlock();
 		redstoneUpdateInteractor.execute(new BlockPosition(block.getX(), block.getY(), block.getZ()));
