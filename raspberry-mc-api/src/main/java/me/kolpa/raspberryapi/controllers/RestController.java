@@ -2,7 +2,7 @@ package me.kolpa.raspberryapi.controllers;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import me.kolpa.raspberryapi.dto.GpioPinDto;
-import me.kolpa.raspberrymclib.core.model.GpioPin;
+import me.kolpa.raspberrymclib.core.model.OutputPin;
 import me.kolpa.raspberrymclib.core.repository.UnitOfWork;
 import me.kolpa.raspberrymclib.core.repository.UnitOfWorkFactory;
 import me.kolpa.raspberrymclib.impl.repository.inmemory.InMemoryUnitOfWorkFactory;
@@ -27,33 +27,33 @@ public class RestController
 
 		for (int i = 0; i < 7; i++)
 		{
-			memoryUnitOfWorkFactory.getGpioRepository().add(new GpioPin(i, 0));
+			memoryUnitOfWorkFactory.getOutputPinRepository().add(new OutputPin(i, 0));
 		}
 	}
 
 
-	@GetMapping("/gpio-pins")
+	@GetMapping("/output-pins")
 	public List<GpioPinDto> getAll() throws Exception
 	{
 		try (UnitOfWork unitOfWork = unitOfWorkFactory.create())
 		{
-			List<GpioPin> pins = unitOfWork.gpioPins().getAll();
+			List<OutputPin> pins = unitOfWork.outputPins().getAll();
 
 			return pins.stream().map(GpioPinDto::new).collect(Collectors.toList());
 		}
 	}
 
-	@GetMapping("/gpio-pins/{pinId}")
+	@GetMapping("/output-pins/{pinId}")
 	public ResponseEntity<GpioPinDto> getById(@PathVariable("pinId") int pinId) throws Exception
 	{
 		try (UnitOfWork unitOfWork = unitOfWorkFactory.create())
 		{
-			GpioPin gpioPin = unitOfWork.gpioPins().getById(pinId);
+			OutputPin outputPin = unitOfWork.outputPins().getById(pinId);
 
-			if (gpioPin == null)
+			if (outputPin == null)
 				return ResponseEntity.notFound().build();
 
-			return ResponseEntity.ok(new GpioPinDto(gpioPin));
+			return ResponseEntity.ok(new GpioPinDto(outputPin));
 		}
 	}
 
@@ -63,19 +63,19 @@ public class RestController
 		public int strength;
 	}
 
-	@PutMapping("/gpio-pins/{pinId}")
+	@PutMapping("/output-pins/{pinId}")
 	public ResponseEntity<GpioPinDto> updateById(@PathVariable("pinId") int pinId,  @RequestBody UpdateRequest body) throws Exception
 	{
 		try (UnitOfWork unitOfWork = unitOfWorkFactory.create())
 		{
-			GpioPin gpioPin = unitOfWork.gpioPins().getById(pinId);
+			OutputPin outputPin = unitOfWork.outputPins().getById(pinId);
 
-			if (gpioPin == null)
+			if (outputPin == null)
 				return ResponseEntity.notFound().build();
 			
 			try
 			{
-				gpioPin.setInputSignalLevel(body.strength);
+				outputPin.setInputSignalLevel(body.strength);
 			}
 			catch (IllegalArgumentException e)
 			{
@@ -83,7 +83,7 @@ public class RestController
 			}
 			
 
-			return ResponseEntity.ok(new GpioPinDto(gpioPin));
+			return ResponseEntity.ok(new GpioPinDto(outputPin));
 		}
 	}
 }

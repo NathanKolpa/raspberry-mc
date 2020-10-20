@@ -1,7 +1,7 @@
 package me.kolpa.raspberryapi.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import me.kolpa.raspberrymclib.core.model.GpioPin;
+import me.kolpa.raspberrymclib.core.model.OutputPin;
 
 public class GpioPinDto
 {
@@ -10,7 +10,7 @@ public class GpioPinDto
 	private int pinNumber;
 	private int inputStrength;
 	
-	public GpioPinDto(GpioPin gpioPin)
+	public GpioPinDto(OutputPin gpioPin)
 	{
 		id = gpioPin.getPinId();
 		pinNumber = gpioPin.getPinNumber();

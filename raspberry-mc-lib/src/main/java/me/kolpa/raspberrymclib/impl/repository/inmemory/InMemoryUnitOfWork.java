@@ -1,20 +1,20 @@
 package me.kolpa.raspberrymclib.impl.repository.inmemory;
 
 import me.kolpa.raspberrymclib.core.repository.UnitOfWork;
-import me.kolpa.raspberrymclib.core.repository.domain.GpioPinRepository;
-import me.kolpa.raspberrymclib.impl.repository.inmemory.domain.InMemoryGpioRepository;
+import me.kolpa.raspberrymclib.core.repository.domain.OutputPinRepository;
+import me.kolpa.raspberrymclib.impl.repository.inmemory.domain.InMemoryOutputPinRepository;
 
 public class InMemoryUnitOfWork implements UnitOfWork
 {
-	private InMemoryGpioRepository gpioRepository;
+	private final InMemoryOutputPinRepository gpioRepository;
 
-	public InMemoryUnitOfWork(InMemoryGpioRepository gpioRepository)
+	public InMemoryUnitOfWork(InMemoryOutputPinRepository gpioRepository)
 	{
 		this.gpioRepository = gpioRepository;
 	}
 
 	@Override
-	public GpioPinRepository gpioPins()
+	public OutputPinRepository outputPins()
 	{
 		return gpioRepository;
 	}
