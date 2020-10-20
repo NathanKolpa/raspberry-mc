@@ -11,7 +11,6 @@ public class SpigotOutputPinStructure extends OutputPinStructure
 {
 	private final Block lampBlock;
 	private final Block signBlock;
-	private SignChangeEvent changeEvent = null;
 
 	public SpigotOutputPinStructure(int pinNumber, String world, Block lampBlock, Block signBlock)
 	{
@@ -57,7 +56,7 @@ public class SpigotOutputPinStructure extends OutputPinStructure
 
 		for (; i < 4; i++)
 			sign.setLine(i, "");
-		
+
 		sign.update(true);
 	}
 }

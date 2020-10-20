@@ -1,5 +1,6 @@
 package me.kolpa.raspberrymcspigot.core.usecases;
 
+import me.kolpa.raspberrymclib.core.model.Pin;
 import me.kolpa.raspberrymcspigot.core.repository.UnitOfWork;
 import me.kolpa.raspberrymcspigot.core.repository.UnitOfWorkFactory;
 import me.kolpa.raspberrymcspigot.core.repository.domain.generic.PinStructureRepository;
@@ -18,7 +19,7 @@ public class RedstoneUpdateInteractor
 		this.unitOfWorkFactory = unitOfWorkFactory;
 	}
 	
-	public void execute(BlockPosition at)
+	public void updateAt(BlockPosition at)
 	{
 		UnitOfWork unitOfWork = unitOfWorkFactory.create();
 
@@ -27,6 +28,30 @@ public class RedstoneUpdateInteractor
 		if(outputPinStructure == null)
 			return;
 		
-		outputPinStructure.update();
+		updateSingle(outputPinStructure);
+	}
+	
+	public void updateAll()
+	{
+		UnitOfWork unitOfWork = unitOfWorkFactory.create();
+		
+		List<OutputPinStructure> structures = unitOfWork.outputPinStructures().getAll();
+		
+		for(OutputPinStructure structure : structures)
+		{
+			updateSingle(structure);
+		}
+	}
+	
+	
+	private void updateSingle(OutputPinStructure structure)
+	{
+		int oldCurrent = structure.getPower();
+		structure.update();
+
+		if(oldCurrent == structure.getPower())
+			return;
+		
+		//send to server
 	}
 }
