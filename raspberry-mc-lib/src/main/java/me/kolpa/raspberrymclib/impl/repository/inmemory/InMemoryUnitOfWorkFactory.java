@@ -2,13 +2,13 @@ package me.kolpa.raspberrymclib.impl.repository.inmemory;
 
 import me.kolpa.raspberrymclib.core.repository.UnitOfWork;
 import me.kolpa.raspberrymclib.core.repository.UnitOfWorkFactory;
-import me.kolpa.raspberrymclib.impl.repository.inmemory.domain.InMemoryGpioRepository;
+import me.kolpa.raspberrymclib.impl.repository.inmemory.domain.InMemoryOutputPinRepository;
 
 public class InMemoryUnitOfWorkFactory implements UnitOfWorkFactory
 {
-	private final InMemoryGpioRepository gpioRepository = new InMemoryGpioRepository();
+	private final InMemoryOutputPinRepository gpioRepository = new InMemoryOutputPinRepository();
 	
-	public InMemoryGpioRepository getGpioRepository()
+	public InMemoryOutputPinRepository getOutputPinRepository()
 	{
 		return gpioRepository;
 	}

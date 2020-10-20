@@ -1,10 +1,10 @@
 package me.kolpa.raspberrymclib.core.model;
 
-public class GpioPin extends Pin
+public class OutputPin extends Pin
 {
 	private int inputSignalLevel = 0;
 	
-	public GpioPin(int pinNumber, int inputSignalLevel)
+	public OutputPin(int pinNumber, int inputSignalLevel)
 	{
 		super(pinNumber);
 		setInputSignalLevel(inputSignalLevel);
