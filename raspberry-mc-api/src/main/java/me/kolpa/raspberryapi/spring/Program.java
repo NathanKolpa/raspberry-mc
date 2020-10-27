@@ -1,4 +1,4 @@
-package me.kolpa.raspberryapi;
+package me.kolpa.raspberryapi.spring;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

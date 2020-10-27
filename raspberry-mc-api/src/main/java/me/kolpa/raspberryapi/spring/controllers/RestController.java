@@ -1,11 +1,11 @@
-package me.kolpa.raspberryapi.controllers;
+package me.kolpa.raspberryapi.spring.controllers;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import me.kolpa.raspberryapi.dto.GpioPinDto;
+import me.kolpa.raspberryapi.spring.dto.GpioPinDto;
 import me.kolpa.raspberrymclib.core.model.OutputPin;
-import me.kolpa.raspberrymclib.core.repository.UnitOfWork;
-import me.kolpa.raspberrymclib.core.repository.UnitOfWorkFactory;
-import me.kolpa.raspberrymclib.impl.repository.inmemory.InMemoryUnitOfWorkFactory;
+import me.kolpa.raspberryapi.core.repository.UnitOfWork;
+import me.kolpa.raspberryapi.core.repository.UnitOfWorkFactory;
+import me.kolpa.raspberryapi.impl.repository.inmemory.InMemoryUnitOfWorkFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

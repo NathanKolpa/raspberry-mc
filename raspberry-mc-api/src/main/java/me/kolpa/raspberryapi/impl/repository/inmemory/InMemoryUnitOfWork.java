@@ -1,8 +1,8 @@
-package me.kolpa.raspberrymclib.impl.repository.inmemory;
+package me.kolpa.raspberryapi.impl.repository.inmemory;
 
-import me.kolpa.raspberrymclib.core.repository.UnitOfWork;
-import me.kolpa.raspberrymclib.core.repository.domain.OutputPinRepository;
-import me.kolpa.raspberrymclib.impl.repository.inmemory.domain.InMemoryOutputPinRepository;
+import me.kolpa.raspberryapi.core.repository.UnitOfWork;
+import me.kolpa.raspberryapi.core.repository.domain.OutputPinRepository;
+import me.kolpa.raspberryapi.impl.repository.inmemory.domain.InMemoryOutputPinRepository;
 
 public class InMemoryUnitOfWork implements UnitOfWork
 {

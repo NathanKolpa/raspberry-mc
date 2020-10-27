@@ -1,4 +1,4 @@
-package me.kolpa.raspberrymclib.core.repository;
+package me.kolpa.raspberryapi.core.repository;
 
 public interface UnitOfWorkFactory
 {

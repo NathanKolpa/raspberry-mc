@@ -1,4 +1,4 @@
-package me.kolpa.raspberryapi.dto;
+package me.kolpa.raspberryapi.spring.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import me.kolpa.raspberrymclib.core.model.OutputPin;

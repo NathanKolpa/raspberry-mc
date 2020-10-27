@@ -1,4 +1,4 @@
-package me.kolpa.raspberrymclib.core.repository.domain;
+package me.kolpa.raspberryapi.core.repository.domain;
 
 import java.util.List;
 

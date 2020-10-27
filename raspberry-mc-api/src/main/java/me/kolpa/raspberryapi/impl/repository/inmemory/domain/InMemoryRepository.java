@@ -1,6 +1,7 @@
-package me.kolpa.raspberrymclib.impl.repository.inmemory.domain;
+package me.kolpa.raspberryapi.impl.repository.inmemory.domain;
 
-import me.kolpa.raspberrymclib.core.repository.domain.Repository;
+
+import me.kolpa.raspberryapi.core.repository.domain.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
