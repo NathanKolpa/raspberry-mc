@@ -1,4 +1,4 @@
-package me.kolpa.raspberryapi.impl.repository.inmemory.domain;
+package me.kolpa.raspberrymclib.impl.repository.inmemory.domain;
 
 import me.kolpa.raspberrymclib.core.model.Pin;
 

@@ -29,7 +29,7 @@ public class RemoteRaspberry implements Raspberry
 	public void fetchState() throws IOException
 	{
 		HttpClient httpClient = HttpClientBuilder.create().build();
-		HttpGet getRequest = new HttpGet("http://localhost:8080/output-pins/");
+		HttpGet getRequest = new HttpGet("http://aardappel.local:8080/output-pins/");
 		HttpResponse response = httpClient.execute(getRequest);
 
 		String responseString = EntityUtils.toString(response.getEntity(), "UTF-8");
@@ -69,7 +69,7 @@ public class RemoteRaspberry implements Raspberry
 			try
 			{
 				HttpClient httpClient = HttpClientBuilder.create().build();
-				HttpPut putRequest = new HttpPut("http://localhost:8080/output-pins/" + pin.getPinId());
+				HttpPut putRequest = new HttpPut("http://aardappel.local:8080/output-pins/" + pin.getPinId());
 				StringEntity params = new StringEntity("{\"input_strength\":" + pin.getInputSignalLevel() + "}", ContentType.APPLICATION_JSON);
 				putRequest.setEntity(params);
 				HttpResponse response = httpClient.execute(putRequest);

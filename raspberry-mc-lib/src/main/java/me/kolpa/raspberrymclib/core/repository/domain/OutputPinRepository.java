@@ -1,4 +1,4 @@
-package me.kolpa.raspberryapi.core.repository.domain;
+package me.kolpa.raspberrymclib.core.repository.domain;
 
 import me.kolpa.raspberrymclib.core.model.OutputPin;
 
