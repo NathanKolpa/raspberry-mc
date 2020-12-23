@@ -3,6 +3,7 @@ package me.kolpa.raspberryapi.spring.controllers;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import me.kolpa.raspberryapi.impl.Pi4JRaspberry;
 import me.kolpa.raspberryapi.spring.dto.GpioPinDto;
 import me.kolpa.raspberryapi.spring.dto.InputPinDto;
 import me.kolpa.raspberrymclib.core.model.OutputPin;
@@ -46,13 +47,11 @@ public class RestController
 	private RestController()
 	{
 		InMemoryUnitOfWorkFactory memoryUnitOfWorkFactory = new InMemoryUnitOfWorkFactory();
-		raspberryServiceAdapter = new RaspberryServiceAdapter(new MockRaspberry());
+		raspberryServiceAdapter = new RaspberryServiceAdapter(new Pi4JRaspberry());
 
 		raspberryServiceAdapter.getOutputPins().add(new OutputPin(1, 0));
 		raspberryServiceAdapter.getOutputPins().add(new OutputPin(2, 0));
 		raspberryServiceAdapter.getOutputPins().add(new OutputPin(3, 0));
-		raspberryServiceAdapter.getOutputPins().add(new OutputPin(4, 0));
-		raspberryServiceAdapter.getOutputPins().add(new OutputPin(5, 0));
 
 		raspberryServiceAdapter.getTemperatureSensors().add(new TemperatureSensorInputPin(5, 26, 30, 20));
 

@@ -45,7 +45,7 @@ public class Pi4JRaspberry implements Raspberry
 			pin.low();
 		}
 	}
-
+	
 	@Override
 	public int getInput(int pinNumber)
 	{
