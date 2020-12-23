@@ -14,7 +14,7 @@ public class FileUnitOfWorkFactory implements UnitOfWorkFactory
 {
 	private final InMemoryOutputPinStructureRepository outputPinStructures = new InMemoryOutputPinStructureRepository();
 	private final Serializer serializer;
-	private final File file = new File("plugins/rapsberry-mc/.saved.json");
+	private final File file = new File("plugins/raspberry-mc/.saved.json");
 
 	public static FileUnitOfWorkFactory readFile(Serializer serializer)
 	{

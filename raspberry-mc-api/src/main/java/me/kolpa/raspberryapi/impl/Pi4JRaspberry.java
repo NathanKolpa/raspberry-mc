@@ -28,14 +28,6 @@ public class Pi4JRaspberry implements Raspberry
 	}
 
 	@Override
-	public List<Integer> getOutputPins()
-	{
-		return outputs.stream()
-				.map(gpioPinDigitalOutput -> gpioPinDigitalOutput.getPin().getAddress())
-				.collect(Collectors.toList());
-	}
-
-	@Override
 	public void updatePin(int pinNumber, PinState newState)
 	{
 		GpioPinDigitalOutput pin = outputs.stream()
@@ -52,6 +44,12 @@ public class Pi4JRaspberry implements Raspberry
 		{
 			pin.low();
 		}
+	}
+
+	@Override
+	public int getInput(int pinNumber)
+	{
+		return 0;
 	}
 }
 //newState == PinState.High ? com.pi4j.io.gpio.PinState.HIGH : com.pi4j.io.gpio.PinState.LOW

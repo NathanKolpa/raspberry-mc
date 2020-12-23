@@ -34,7 +34,7 @@ public class GetOutputPinInteractor
 			return outputPin;
 		}
 
-		unitOfWork.outputPins().addAll(outputPinService.getAll());
+		unitOfWork.outputPins().addAll(outputPinService.getAllOutputPins());
 		hasFetched = true;
 		
 		OutputPin outputPin = unitOfWork.outputPins().getById(id);
@@ -54,7 +54,7 @@ public class GetOutputPinInteractor
 			return unitOfWork.outputPins().getAll();
 		}
 		
-		List<OutputPin> pins = outputPinService.getAll();
+		List<OutputPin> pins = outputPinService.getAllOutputPins();
 		unitOfWork.outputPins().addAll(pins);
 		
 		hasFetched = true;

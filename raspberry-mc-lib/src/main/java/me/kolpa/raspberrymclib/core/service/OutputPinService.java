@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface OutputPinService
 {
-	List<OutputPin> getAll();
+	List<OutputPin> getAllOutputPins();
 	void update(OutputPin pin);
 }

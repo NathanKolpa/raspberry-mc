@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface Raspberry
 {
-	List<Integer> getOutputPins();
 	void updatePin(int pinNumber, PinState newState);
+	int getInput(int pinNumber);
 }

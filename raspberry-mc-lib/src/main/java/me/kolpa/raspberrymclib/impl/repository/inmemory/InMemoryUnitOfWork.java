@@ -2,16 +2,16 @@ package me.kolpa.raspberrymclib.impl.repository.inmemory;
 
 import me.kolpa.raspberrymclib.core.repository.UnitOfWork;
 import me.kolpa.raspberrymclib.core.repository.domain.OutputPinRepository;
-import me.kolpa.raspberrymclib.core.repository.domain.TemperatureSensorInputPinRepository;
+import me.kolpa.raspberrymclib.core.repository.domain.SensorInputPinRepository;
 import me.kolpa.raspberrymclib.impl.repository.inmemory.domain.InMemoryOutputPinRepository;
-import me.kolpa.raspberrymclib.impl.repository.inmemory.domain.InMemoryTemperatureSensorInputPinRepository;
+import me.kolpa.raspberrymclib.impl.repository.inmemory.domain.InMemorySensorInputPinRepository;
 
 public class InMemoryUnitOfWork implements UnitOfWork
 {
 	private final InMemoryOutputPinRepository gpioRepository;
-	private final InMemoryTemperatureSensorInputPinRepository inMemoryTemperatureSensorInputPinRepository;
+	private final InMemorySensorInputPinRepository inMemoryTemperatureSensorInputPinRepository;
 
-	public InMemoryUnitOfWork(InMemoryOutputPinRepository gpioRepository, InMemoryTemperatureSensorInputPinRepository inMemoryTemperatureSensorInputPinRepository)
+	public InMemoryUnitOfWork(InMemoryOutputPinRepository gpioRepository, InMemorySensorInputPinRepository inMemoryTemperatureSensorInputPinRepository)
 	{
 		this.gpioRepository = gpioRepository;
 		this.inMemoryTemperatureSensorInputPinRepository = inMemoryTemperatureSensorInputPinRepository;
@@ -24,7 +24,7 @@ public class InMemoryUnitOfWork implements UnitOfWork
 	}
 
 	@Override
-	public TemperatureSensorInputPinRepository temperatureSensors()
+	public SensorInputPinRepository inputPins()
 	{
 		return inMemoryTemperatureSensorInputPinRepository;
 	}

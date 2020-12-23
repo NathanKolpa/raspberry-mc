@@ -25,6 +25,7 @@ public final class RaspberryMcSpigot extends JavaPlugin
 		try
 		{
 			raspberry.fetchState();
+//			raspberry.connect();
 		}
 		catch (IOException e)
 		{

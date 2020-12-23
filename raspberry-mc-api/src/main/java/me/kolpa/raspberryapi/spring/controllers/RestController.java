@@ -1,50 +1,90 @@
 package me.kolpa.raspberryapi.spring.controllers;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import me.kolpa.raspberryapi.impl.Pi4JRaspberry;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.kolpa.raspberryapi.spring.dto.GpioPinDto;
 import me.kolpa.raspberryapi.spring.dto.InputPinDto;
 import me.kolpa.raspberrymclib.core.model.OutputPin;
-import me.kolpa.raspberrymclib.core.model.PinState;
 import me.kolpa.raspberrymclib.core.model.TemperatureSensorInputPin;
-import me.kolpa.raspberrymclib.core.repository.UnitOfWork;
 import me.kolpa.raspberrymclib.core.usecases.GetInputPinInteractor;
 import me.kolpa.raspberrymclib.core.usecases.GetOutputPinInteractor;
 import me.kolpa.raspberrymclib.core.usecases.UpdateOutputPinInteractor;
 import me.kolpa.raspberrymclib.core.usecases.exceptions.EntityNotFoundException;
 import me.kolpa.raspberrymclib.impl.repository.inmemory.InMemoryUnitOfWorkFactory;
 import me.kolpa.raspberrymclib.impl.service.MockRaspberry;
-import me.kolpa.raspberrymclib.impl.service.Raspberry;
 import me.kolpa.raspberrymclib.impl.service.RaspberryServiceAdapter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
+@Controller
 @org.springframework.web.bind.annotation.RestController
 public class RestController
 {
+	@Autowired
+	private SimpMessagingTemplate webSocket;
 
 	private final GetOutputPinInteractor getOutputPinInteractor;
 	private final UpdateOutputPinInteractor updateOutputPinInteractor;
 	private final GetInputPinInteractor getInputPinInteractor;
-	
+	private final RaspberryServiceAdapter raspberryServiceAdapter;
+
 	private RestController()
 	{
 		InMemoryUnitOfWorkFactory memoryUnitOfWorkFactory = new InMemoryUnitOfWorkFactory();
-		RaspberryServiceAdapter raspberryServiceAdapter = new RaspberryServiceAdapter(new MockRaspberry());
-		
-		memoryUnitOfWorkFactory.create().temperatureSensors().add(new TemperatureSensorInputPin(6, 24, 30, 20));
-		
+		raspberryServiceAdapter = new RaspberryServiceAdapter(new MockRaspberry());
+
+		raspberryServiceAdapter.getOutputPins().add(new OutputPin(1, 0));
+		raspberryServiceAdapter.getOutputPins().add(new OutputPin(2, 0));
+		raspberryServiceAdapter.getOutputPins().add(new OutputPin(3, 0));
+		raspberryServiceAdapter.getOutputPins().add(new OutputPin(4, 0));
+		raspberryServiceAdapter.getOutputPins().add(new OutputPin(5, 0));
+
+		raspberryServiceAdapter.getTemperatureSensors().add(new TemperatureSensorInputPin(5, 26, 30, 20));
+
 		getOutputPinInteractor = new GetOutputPinInteractor(raspberryServiceAdapter, memoryUnitOfWorkFactory);
 		updateOutputPinInteractor = new UpdateOutputPinInteractor(memoryUnitOfWorkFactory, raspberryServiceAdapter);
-		getInputPinInteractor = new GetInputPinInteractor(memoryUnitOfWorkFactory);
+		getInputPinInteractor = new GetInputPinInteractor(memoryUnitOfWorkFactory, raspberryServiceAdapter);
+
+
+		raspberryServiceAdapter.setOnUpdate(inputPin ->
+		{
+			try
+			{
+				ObjectMapper objectMapper = new ObjectMapper();
+				webSocket.convertAndSend("/topic/input-pins", objectMapper.writeValueAsString(new InputPinDto(inputPin)));
+			}
+			catch (JsonProcessingException e)
+			{
+				e.printStackTrace();
+			}
+		});
+	}
+
+	@EventListener(ApplicationReadyEvent.class)
+	public void afterStartup()
+	{
+		raspberryServiceAdapter.updateAllOutput();
+	}
+
+	@Scheduled(fixedRate = 250)
+	public void reportCurrentTime()
+	{
+		raspberryServiceAdapter.pollForUpdates();
 	}
 
 
@@ -74,7 +114,7 @@ public class RestController
 	}
 
 	@PutMapping("/output-pins/{pinId}")
-	public ResponseEntity<GpioPinDto> updateOutputById(@PathVariable("pinId") int pinId,  @RequestBody UpdateRequest body)
+	public ResponseEntity<GpioPinDto> updateOutputById(@PathVariable("pinId") int pinId, @RequestBody UpdateRequest body)
 	{
 		try
 		{

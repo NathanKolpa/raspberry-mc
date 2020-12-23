@@ -1,8 +1,9 @@
 package me.kolpa.raspberrymclib.impl.repository.inmemory.domain;
 
-import me.kolpa.raspberrymclib.core.model.TemperatureSensorInputPin;
-import me.kolpa.raspberrymclib.core.repository.domain.TemperatureSensorInputPinRepository;
+import me.kolpa.raspberrymclib.core.model.SensorInputPin;
+import me.kolpa.raspberrymclib.core.repository.domain.SensorInputPinRepository;
 
-public class InMemoryTemperatureSensorInputPinRepository extends InMemoryPinRepository<TemperatureSensorInputPin> implements TemperatureSensorInputPinRepository
+public class InMemorySensorInputPinRepository
+		extends InMemoryPinRepository<SensorInputPin> implements SensorInputPinRepository
 {
 }
