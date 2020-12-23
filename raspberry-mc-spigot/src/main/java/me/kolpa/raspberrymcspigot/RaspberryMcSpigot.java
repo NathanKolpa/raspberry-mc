@@ -1,16 +1,12 @@
 package me.kolpa.raspberrymcspigot;
 
-import me.kolpa.raspberrymcspigot.core.usecases.AddOutputPinStructureInteractor;
-import me.kolpa.raspberrymcspigot.core.usecases.RedstoneUpdateInteractor;
-import me.kolpa.raspberrymcspigot.core.usecases.RemoveBlockInteractor;
+import me.kolpa.raspberrymcspigot.core.usecases.*;
 import me.kolpa.raspberrymcspigot.impl.raspberry.RemoteRaspberry;
 import me.kolpa.raspberrymcspigot.impl.repository.file.FileUnitOfWorkFactory;
 import me.kolpa.raspberrymcspigot.impl.repository.file.json.JsonSerializer;
 import me.kolpa.raspberrymcspigot.listener.DestroyListener;
 import me.kolpa.raspberrymcspigot.listener.SignListener;
 import org.bukkit.Bukkit;
-import org.bukkit.block.Block;
-import org.bukkit.block.data.AnaloguePowerable;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -27,7 +23,7 @@ public final class RaspberryMcSpigot extends JavaPlugin
 		try
 		{
 			raspberry.fetchState();
-//			raspberry.connect();
+			raspberry.connect();
 		}
 		catch (IOException e)
 		{
@@ -37,25 +33,35 @@ public final class RaspberryMcSpigot extends JavaPlugin
 
 		//TODO: dingen toevoegen is crack
 		AddOutputPinStructureInteractor addOutputPinStructureInteractor = new AddOutputPinStructureInteractor(
-				fileUnitOfWorkFactory);
+				fileUnitOfWorkFactory,
+				raspberry);
+
+		AddInputPinStructureInteractor addInputPinStructureInteractor = new AddInputPinStructureInteractor(
+				fileUnitOfWorkFactory,
+				raspberry);
+
 		RemoveBlockInteractor removeBlockInteractor = new RemoveBlockInteractor(fileUnitOfWorkFactory);
 		RedstoneUpdateInteractor redstoneUpdateInteractor = new RedstoneUpdateInteractor(fileUnitOfWorkFactory,
 				raspberry);
+		InputUpdateInteractor inputUpdateInteractor = new InputUpdateInteractor(fileUnitOfWorkFactory);
 
-		getServer().getPluginManager().registerEvents(new SignListener(this, addOutputPinStructureInteractor), this);
+		getServer().getPluginManager()
+				.registerEvents(
+						new SignListener(this, addOutputPinStructureInteractor, addInputPinStructureInteractor),
+						this);
 		getServer().getPluginManager().registerEvents(new DestroyListener(removeBlockInteractor), this);
 
 		//TODO: test performance impact 
 		Bukkit.getScheduler().runTaskTimer(this, redstoneUpdateInteractor::updateAll, 0, 1);
+
+		raspberry.setUpdateHandler(inputPin ->
+		{
+			Bukkit.getScheduler().scheduleSyncDelayedTask(this, () ->
+			{
+				inputUpdateInteractor.execute(inputPin);
+			});
+		});
 	}
-	
-//	private void test()
-//	{
-//		Block block = getServer().getWorlds().get(0).getBlockAt(-97, 66, -362);
-//		AnaloguePowerable powerable = (AnaloguePowerable)block.getBlockData();
-//		powerable.setPower(5);
-//		block.setBlockData(powerable);
-//	}
 
 	@Override
 	public void onDisable()

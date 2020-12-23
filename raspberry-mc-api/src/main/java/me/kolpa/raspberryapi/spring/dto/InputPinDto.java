@@ -9,6 +9,7 @@ public class InputPinDto
 	private int pinNumber;
 	private int inputStrength;
 	private String sensorName;
+	private String value;
 	
 	public InputPinDto(SensorInputPin sensorInputPin)
 	{
@@ -16,6 +17,7 @@ public class InputPinDto
 		pinNumber = sensorInputPin.getPinNumber();
 		inputStrength = sensorInputPin.getInputSignalLevel();
 		sensorName = sensorInputPin.getName();
+		value = sensorInputPin.getValue();
 	}
 
 	@JsonProperty("id")
@@ -40,5 +42,11 @@ public class InputPinDto
 	public String getSensorName()
 	{
 		return sensorName;
+	}
+
+	@JsonProperty("input_value")
+	public String getValue()
+	{
+		return value;
 	}
 }

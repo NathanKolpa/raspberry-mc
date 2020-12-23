@@ -25,6 +25,12 @@ public class TemperatureSensorInputPin extends SensorInputPin
 		return "TEMP";
 	}
 
+	@Override
+	public String getValue()
+	{
+		return getTemperature() + " C";
+	}
+
 	private int ensureRange(int value)
 	{
 		return Math.min(Math.max(value, 0), 15);

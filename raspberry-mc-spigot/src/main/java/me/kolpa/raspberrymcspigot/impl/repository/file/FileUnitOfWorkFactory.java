@@ -42,6 +42,7 @@ public class FileUnitOfWorkFactory implements UnitOfWorkFactory
 			
 			Serializer.SerializationData data = serializer.deSerialize(fileContents);
 			outputPinStructures.setValues(data.outputPinStructures);
+			inputPinStructures.setValues(data.inputPinStructures);
 			
 		}
 		catch (IOException e)

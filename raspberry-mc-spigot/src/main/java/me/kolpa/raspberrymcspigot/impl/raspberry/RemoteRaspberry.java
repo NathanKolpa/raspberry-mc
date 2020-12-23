@@ -32,9 +32,13 @@ public class RemoteRaspberry extends StompSessionHandlerAdapter implements Raspb
 	private List<OutputPin> pins = new ArrayList<>();
 	private List<ValueSensorInputPin> inputs = new ArrayList<>();
 	private ExecutorService executor = Executors.newCachedThreadPool();
+	private HttpClient httpClient = HttpClientBuilder.create().build();
+
 
 	private final String base = "localhost:8080";
 	WebSocketStompClient stompClient = null;
+	StompSession currentSession = null;
+	private InputUpdateHandler updateHandler;
 
 	public void connect() throws IOException
 	{
@@ -42,7 +46,10 @@ public class RemoteRaspberry extends StompSessionHandlerAdapter implements Raspb
 		stompClient = new WebSocketStompClient(client);
 		stompClient.setMessageConverter(new StringMessageConverter());
 
-		stompClient.connect("ws://" + base + "/ws", this);
+		stompClient.connect("ws://" + base + "/ws", this).addCallback(stompSession ->
+		{
+			currentSession = stompSession;
+		}, Throwable::printStackTrace);
 	}
 
 	public void fetchState() throws IOException
@@ -53,7 +60,6 @@ public class RemoteRaspberry extends StompSessionHandlerAdapter implements Raspb
 
 	private void fetchInputState() throws IOException
 	{
-		HttpClient httpClient = HttpClientBuilder.create().build();
 		HttpGet getRequest = new HttpGet("http://" + base + "/output-pins/");
 		HttpResponse response = httpClient.execute(getRequest);
 
@@ -77,7 +83,6 @@ public class RemoteRaspberry extends StompSessionHandlerAdapter implements Raspb
 
 	private void fetchOutputState() throws IOException
 	{
-		HttpClient httpClient = HttpClientBuilder.create().build();
 		HttpGet getRequest = new HttpGet("http://" + base + "/input-pins/");
 		HttpResponse response = httpClient.execute(getRequest);
 
@@ -92,8 +97,9 @@ public class RemoteRaspberry extends StompSessionHandlerAdapter implements Raspb
 			int pinNumber = jsonObject.getInt("pin_number");
 			int strength = jsonObject.getInt("input_strength");
 			String name = jsonObject.getString("sensor_type");
+			String value = jsonObject.getString("input_value");
 
-			ValueSensorInputPin valueSensorInputPin = new ValueSensorInputPin(pinNumber, strength, name);
+			ValueSensorInputPin valueSensorInputPin = new ValueSensorInputPin(pinNumber, strength, name, value);
 			valueSensorInputPin.setPinId(id);
 
 			inputs.add(valueSensorInputPin);
@@ -102,8 +108,11 @@ public class RemoteRaspberry extends StompSessionHandlerAdapter implements Raspb
 
 	public void shutdown()
 	{
-		if (stompClient != null)
+		if (currentSession != null && stompClient != null)
+		{
+			currentSession.disconnect();
 			stompClient.stop();
+		}
 
 		executor.shutdown();
 	}
@@ -121,7 +130,6 @@ public class RemoteRaspberry extends StompSessionHandlerAdapter implements Raspb
 		{
 			try
 			{
-				HttpClient httpClient = HttpClientBuilder.create().build();
 				HttpPut putRequest = new HttpPut("http://" + base + "/output-pins/" + pin.getPinId());
 				StringEntity params = new StringEntity("{\"input_strength\":" + pin.getInputSignalLevel() + "}",
 						ContentType.APPLICATION_JSON);
@@ -142,6 +150,12 @@ public class RemoteRaspberry extends StompSessionHandlerAdapter implements Raspb
 	}
 
 	@Override
+	public void setUpdateHandler(InputUpdateHandler updateHandler)
+	{
+		this.updateHandler = updateHandler;
+	}
+
+	@Override
 	public void afterConnected(StompSession session, StompHeaders connectedHeaders)
 	{
 		session.subscribe("/topic/input-pins", this);
@@ -156,7 +170,35 @@ public class RemoteRaspberry extends StompSessionHandlerAdapter implements Raspb
 	@Override
 	public void handleFrame(StompHeaders headers, Object payload)
 	{
-		System.out.println("Message: " + payload);
+		String json = (String)payload;
+		JSONObject jsonObject = new JSONObject(json);
+
+		int id = jsonObject.getInt("id");
+		int pinId = jsonObject.getInt("pin_number");
+		int inputStrength = jsonObject.getInt("input_strength");
+		String sensorType = jsonObject.getString("sensor_type");
+		String value = jsonObject.getString("input_value");
+
+		ValueSensorInputPin valueSensorInputPin = inputs.stream()
+				.filter(x -> x.getPinId() == id)
+				.findFirst()
+				.orElse(null);
+
+		if(valueSensorInputPin == null)
+		{
+			valueSensorInputPin = new ValueSensorInputPin(pinId, inputStrength, sensorType, value);
+			valueSensorInputPin.setPinId(id);
+			inputs.add(valueSensorInputPin);
+		}
+		else
+		{
+			valueSensorInputPin.setValue(value);
+			valueSensorInputPin.setInputSignalLevel(inputStrength);
+			valueSensorInputPin.setName(sensorType);
+		}
+		
+		if(updateHandler != null)
+			updateHandler.onUpdate(valueSensorInputPin);
 	}
 
 	@Override

@@ -7,8 +7,14 @@ import java.util.List;
 
 public interface Raspberry
 {
+	interface InputUpdateHandler
+	{
+		void onUpdate(SensorInputPin inputPin);
+	}
+	
 	List<OutputPin> getOutputPins();
 	void update(OutputPin pin);
 	
 	List<SensorInputPin> getInputPins();
+	void setUpdateHandler(InputUpdateHandler updateHandler);
 }

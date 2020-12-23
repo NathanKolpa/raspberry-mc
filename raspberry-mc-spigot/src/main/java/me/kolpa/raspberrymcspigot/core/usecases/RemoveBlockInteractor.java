@@ -23,11 +23,13 @@ public class RemoveBlockInteractor
 		
 		int removeCount = 0;
 		removeCount += removeFromRepository(unitOfWork.outputPinStructures(), position);
+		removeCount += removeFromRepository(unitOfWork.inputPinStructures(), position);
 
 		if(removeCount > 0)
 			unitOfWork.save();
 	}
 
+	// TODO: test the world id
 	private <T extends PinStructure> int removeFromRepository(PinStructureRepository<T> pinStructureRepository, BlockPosition position)
 	{
 		int removeCount = 0;
