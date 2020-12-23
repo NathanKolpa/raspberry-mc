@@ -1,11 +1,14 @@
 package me.kolpa.raspberrymcspigot.impl.repository.file.json;
 
 import com.google.gson.Gson;
+import me.kolpa.raspberrymcspigot.core.structure.InputPinStructure;
 import me.kolpa.raspberrymcspigot.core.structure.OutputPinStructure;
 import me.kolpa.raspberrymcspigot.impl.repository.file.Serializer;
+import me.kolpa.raspberrymcspigot.impl.repository.file.json.file.InputPinJsonObject;
 import me.kolpa.raspberrymcspigot.impl.repository.file.json.file.OutputPinJsonObject;
 import me.kolpa.raspberrymcspigot.impl.repository.file.json.file.PositionJsonObject;
 import me.kolpa.raspberrymcspigot.impl.repository.file.json.file.RootJsonObject;
+import me.kolpa.raspberrymcspigot.impl.structure.SpigotInputPinStructure;
 import me.kolpa.raspberrymcspigot.impl.structure.SpigotOutputPinStructure;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -24,7 +27,7 @@ public class JsonSerializer implements Serializer
 	{
 		RootJsonObject rootJsonObject = new RootJsonObject();
 		
-		rootJsonObject.outputPins = new ArrayList<>(data.outputPinStructures.size());
+		rootJsonObject.output_pin_structures = new ArrayList<>(data.outputPinStructures.size());
 		for(OutputPinStructure outputPinStructure : data.outputPinStructures)
 		{
 			OutputPinJsonObject outputPinJsonObject = new OutputPinJsonObject();
@@ -32,7 +35,19 @@ public class JsonSerializer implements Serializer
 			outputPinJsonObject.world = outputPinStructure.getWorld();
 			outputPinJsonObject.block = new PositionJsonObject(outputPinStructure.getBlockPosition());
 			outputPinJsonObject.sign = new PositionJsonObject(outputPinStructure.getSignPosition());
-			rootJsonObject.outputPins.add(outputPinJsonObject);
+			rootJsonObject.output_pin_structures.add(outputPinJsonObject);
+		}
+
+		rootJsonObject.input_pin_structures = new ArrayList<>(data.inputPinStructures.size());
+		for(InputPinStructure inputPinStructure : data.inputPinStructures)
+		{
+			InputPinJsonObject inputPinJsonObject = new InputPinJsonObject();
+			inputPinJsonObject.pin = inputPinStructure.getPinNumber();
+			inputPinJsonObject.world = inputPinStructure.getWorld();
+			inputPinJsonObject.block = new PositionJsonObject(inputPinStructure.getBlockPosition());
+			inputPinJsonObject.sign = new PositionJsonObject(inputPinStructure.getSignPosition());
+			inputPinJsonObject.redstone = new PositionJsonObject(inputPinStructure.getRedstonePosition());
+			rootJsonObject.input_pin_structures.add(inputPinJsonObject);
 		}
 		
 		return gson.toJson(rootJsonObject);
@@ -43,9 +58,9 @@ public class JsonSerializer implements Serializer
 	public SerializationData deSerialize(String data)
 	{
 		RootJsonObject rootJsonObject = gson.fromJson(data, RootJsonObject.class);
-		List<OutputPinStructure> outputPinStructures = new ArrayList<>(rootJsonObject.outputPins.size());
 		
-		for(OutputPinJsonObject jsonObject : rootJsonObject.outputPins)
+		List<OutputPinStructure> outputPinStructures = new ArrayList<>(rootJsonObject.output_pin_structures.size());
+		for(OutputPinJsonObject jsonObject : rootJsonObject.output_pin_structures)
 		{
 			World world = Bukkit.getWorld(UUID.fromString(jsonObject.world));
 			Block block = world.getBlockAt(jsonObject.block.x, jsonObject.block.y, jsonObject.block.z);
@@ -53,7 +68,18 @@ public class JsonSerializer implements Serializer
 			
 			outputPinStructures.add(new SpigotOutputPinStructure(jsonObject.pin, jsonObject.world, block, sign));
 		}
+
+		List<InputPinStructure> inputPinStructures = new ArrayList<>(rootJsonObject.input_pin_structures.size());
+		for(InputPinJsonObject jsonObject : rootJsonObject.input_pin_structures)
+		{
+			World world = Bukkit.getWorld(UUID.fromString(jsonObject.world));
+			Block block = world.getBlockAt(jsonObject.block.x, jsonObject.block.y, jsonObject.block.z);
+			Block sign = world.getBlockAt(jsonObject.sign.x, jsonObject.sign.y, jsonObject.sign.z);
+			Block redstone = world.getBlockAt(jsonObject.redstone.x, jsonObject.redstone.y, jsonObject.redstone.z);
+
+			inputPinStructures.add(new SpigotInputPinStructure(jsonObject.pin, jsonObject.world, block, sign, redstone));
+		}
 		
-		return new SerializationData(outputPinStructures);
+		return new SerializationData(outputPinStructures, inputPinStructures);
 	}
 }

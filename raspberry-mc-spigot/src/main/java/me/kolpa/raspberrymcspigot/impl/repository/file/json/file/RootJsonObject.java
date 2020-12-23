@@ -4,5 +4,7 @@ import java.util.List;
 
 public class RootJsonObject
 {
-	public List<OutputPinJsonObject> outputPins;
+	
+	public List<OutputPinJsonObject> output_pin_structures;
+	public List<InputPinJsonObject> input_pin_structures;
 }

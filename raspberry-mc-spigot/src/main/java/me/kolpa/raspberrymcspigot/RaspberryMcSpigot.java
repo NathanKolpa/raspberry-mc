@@ -9,6 +9,8 @@ import me.kolpa.raspberrymcspigot.impl.repository.file.json.JsonSerializer;
 import me.kolpa.raspberrymcspigot.listener.DestroyListener;
 import me.kolpa.raspberrymcspigot.listener.SignListener;
 import org.bukkit.Bukkit;
+import org.bukkit.block.Block;
+import org.bukkit.block.data.AnaloguePowerable;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -46,6 +48,14 @@ public final class RaspberryMcSpigot extends JavaPlugin
 		//TODO: test performance impact 
 		Bukkit.getScheduler().runTaskTimer(this, redstoneUpdateInteractor::updateAll, 0, 1);
 	}
+	
+//	private void test()
+//	{
+//		Block block = getServer().getWorlds().get(0).getBlockAt(-97, 66, -362);
+//		AnaloguePowerable powerable = (AnaloguePowerable)block.getBlockData();
+//		powerable.setPower(5);
+//		block.setBlockData(powerable);
+//	}
 
 	@Override
 	public void onDisable()

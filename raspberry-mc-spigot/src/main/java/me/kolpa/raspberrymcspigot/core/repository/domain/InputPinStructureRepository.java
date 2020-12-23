@@ -1,5 +1,8 @@
 package me.kolpa.raspberrymcspigot.core.repository.domain;
 
-public interface InputPinStructureRepository
+import me.kolpa.raspberrymcspigot.core.repository.domain.generic.PinStructureRepository;
+import me.kolpa.raspberrymcspigot.core.structure.InputPinStructure;
+
+public interface InputPinStructureRepository  extends PinStructureRepository<InputPinStructure>
 {
 }

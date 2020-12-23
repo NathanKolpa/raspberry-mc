@@ -2,6 +2,7 @@ package me.kolpa.raspberrymcspigot.impl.repository.file;
 
 import me.kolpa.raspberrymcspigot.core.repository.UnitOfWork;
 import me.kolpa.raspberrymcspigot.core.repository.UnitOfWorkFactory;
+import me.kolpa.raspberrymcspigot.impl.repository.memory.domain.InMemoryInputPinStructureRepository;
 import me.kolpa.raspberrymcspigot.impl.repository.memory.domain.InMemoryOutputPinStructureRepository;
 
 import java.io.File;
@@ -13,6 +14,7 @@ import java.nio.file.Paths;
 public class FileUnitOfWorkFactory implements UnitOfWorkFactory
 {
 	private final InMemoryOutputPinStructureRepository outputPinStructures = new InMemoryOutputPinStructureRepository();
+	private final InMemoryInputPinStructureRepository inputPinStructures = new InMemoryInputPinStructureRepository();
 	private final Serializer serializer;
 	private final File file = new File("plugins/raspberry-mc/.saved.json");
 
@@ -51,6 +53,6 @@ public class FileUnitOfWorkFactory implements UnitOfWorkFactory
 	@Override
 	public UnitOfWork create()
 	{
-		return new FileUnitOfWork(serializer, file, outputPinStructures);
+		return new FileUnitOfWork(serializer, file, outputPinStructures, inputPinStructures);
 	}
 }
