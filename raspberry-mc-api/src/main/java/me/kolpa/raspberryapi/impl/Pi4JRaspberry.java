@@ -2,7 +2,6 @@ package me.kolpa.raspberryapi.impl;
 
 import com.pi4j.io.gpio.*;
 import com.pi4j.wiringpi.Gpio;
-import com.sun.org.apache.regexp.internal.RE;
 import me.kolpa.raspberrymclib.core.model.PinState;
 import me.kolpa.raspberrymclib.impl.service.Raspberry;
 

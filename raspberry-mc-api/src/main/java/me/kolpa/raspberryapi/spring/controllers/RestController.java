@@ -10,6 +10,7 @@ import me.kolpa.raspberrymclib.core.usecases.GetOutputPinInteractor;
 import me.kolpa.raspberrymclib.core.usecases.UpdateOutputPinInteractor;
 import me.kolpa.raspberrymclib.core.usecases.exceptions.EntityNotFoundException;
 import me.kolpa.raspberrymclib.impl.repository.inmemory.InMemoryUnitOfWorkFactory;
+import me.kolpa.raspberrymclib.impl.service.MockRaspberry;
 import me.kolpa.raspberrymclib.impl.service.Raspberry;
 import me.kolpa.raspberrymclib.impl.service.RaspberryServiceAdapter;
 import org.springframework.http.ResponseEntity;
@@ -33,9 +34,7 @@ public class RestController
 	private RestController()
 	{
 		InMemoryUnitOfWorkFactory memoryUnitOfWorkFactory = new InMemoryUnitOfWorkFactory();
-		RaspberryServiceAdapter raspberryServiceAdapter = new RaspberryServiceAdapter(new Pi4JRaspberry());
-		
-		
+		RaspberryServiceAdapter raspberryServiceAdapter = new RaspberryServiceAdapter(new MockRaspberry());
 		
 		getOutputPinInteractor = new GetOutputPinInteractor(raspberryServiceAdapter, memoryUnitOfWorkFactory);
 		updateOutputPinInteractor = new UpdateOutputPinInteractor(memoryUnitOfWorkFactory, raspberryServiceAdapter);
