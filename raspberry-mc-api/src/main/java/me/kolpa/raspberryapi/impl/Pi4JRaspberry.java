@@ -1,5 +1,6 @@
 package me.kolpa.raspberryapi.impl;
 
+import com.pi4j.component.temperature.TemperatureSensor;
 import com.pi4j.component.temperature.impl.TmpDS18B20DeviceType;
 import com.pi4j.io.gpio.*;
 import com.pi4j.io.w1.W1Device;
@@ -57,16 +58,7 @@ public class Pi4JRaspberry implements Raspberry
 	@Override
 	public int getInput(int pinNumber)
 	{
-		try
-		{
-			System.out.println(w1Devices.stream().findFirst().get().getValue());
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		
-		return 0;
+		return (int) (((TemperatureSensor) (w1Devices.stream().findFirst().get())).getTemperature());
 	}
 }
 //newState == PinState.High ? com.pi4j.io.gpio.PinState.HIGH : com.pi4j.io.gpio.PinState.LOW
