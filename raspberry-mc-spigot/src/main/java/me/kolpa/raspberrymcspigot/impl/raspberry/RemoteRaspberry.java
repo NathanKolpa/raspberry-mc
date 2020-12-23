@@ -8,9 +8,11 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.conn.HttpClientConnectionManager;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -31,14 +33,15 @@ public class RemoteRaspberry extends StompSessionHandlerAdapter implements Raspb
 {
 	private List<OutputPin> pins = new ArrayList<>();
 	private List<ValueSensorInputPin> inputs = new ArrayList<>();
+
 	private ExecutorService executor = Executors.newCachedThreadPool();
-	private HttpClient httpClient = HttpClientBuilder.create().build();
 
-
-	private final String base = "localhost:8080";
+	private final String base = "192.168.0.124:8080";
 	WebSocketStompClient stompClient = null;
 	StompSession currentSession = null;
 	private InputUpdateHandler updateHandler;
+	
+	// TODO: fix the http client
 
 	public void connect() throws IOException
 	{
@@ -60,6 +63,7 @@ public class RemoteRaspberry extends StompSessionHandlerAdapter implements Raspb
 
 	private void fetchInputState() throws IOException
 	{
+		HttpClient httpClient =  HttpClientBuilder.create().build();
 		HttpGet getRequest = new HttpGet("http://" + base + "/output-pins/");
 		HttpResponse response = httpClient.execute(getRequest);
 
@@ -83,6 +87,8 @@ public class RemoteRaspberry extends StompSessionHandlerAdapter implements Raspb
 
 	private void fetchOutputState() throws IOException
 	{
+		HttpClient httpClient =  HttpClientBuilder.create().build();
+
 		HttpGet getRequest = new HttpGet("http://" + base + "/input-pins/");
 		HttpResponse response = httpClient.execute(getRequest);
 
@@ -130,6 +136,7 @@ public class RemoteRaspberry extends StompSessionHandlerAdapter implements Raspb
 		{
 			try
 			{
+				HttpClient httpClient =  HttpClientBuilder.create().build();
 				HttpPut putRequest = new HttpPut("http://" + base + "/output-pins/" + pin.getPinId());
 				StringEntity params = new StringEntity("{\"input_strength\":" + pin.getInputSignalLevel() + "}",
 						ContentType.APPLICATION_JSON);
@@ -170,7 +177,7 @@ public class RemoteRaspberry extends StompSessionHandlerAdapter implements Raspb
 	@Override
 	public void handleFrame(StompHeaders headers, Object payload)
 	{
-		String json = (String)payload;
+		String json = (String) payload;
 		JSONObject jsonObject = new JSONObject(json);
 
 		int id = jsonObject.getInt("id");
@@ -184,7 +191,7 @@ public class RemoteRaspberry extends StompSessionHandlerAdapter implements Raspb
 				.findFirst()
 				.orElse(null);
 
-		if(valueSensorInputPin == null)
+		if (valueSensorInputPin == null)
 		{
 			valueSensorInputPin = new ValueSensorInputPin(pinId, inputStrength, sensorType, value);
 			valueSensorInputPin.setPinId(id);
@@ -196,8 +203,8 @@ public class RemoteRaspberry extends StompSessionHandlerAdapter implements Raspb
 			valueSensorInputPin.setInputSignalLevel(inputStrength);
 			valueSensorInputPin.setName(sensorType);
 		}
-		
-		if(updateHandler != null)
+
+		if (updateHandler != null)
 			updateHandler.onUpdate(valueSensorInputPin);
 	}
 
