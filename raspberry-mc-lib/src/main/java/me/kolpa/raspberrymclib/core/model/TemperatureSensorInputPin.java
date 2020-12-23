@@ -14,7 +14,7 @@ public class TemperatureSensorInputPin extends SensorInputPin
 	}
 
 	@Override
-	public int getGetInputSignalLevel()
+	public int getInputSignalLevel()
 	{
 		return ensureRange(Math.round(((float) temperature - (float) estimatedMinTemp) / ((float) estimatedMaxTemp  - (float) estimatedMinTemp) * 15f));
 	}

@@ -3,9 +3,12 @@ package me.kolpa.raspberryapi.spring.controllers;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import me.kolpa.raspberryapi.impl.Pi4JRaspberry;
 import me.kolpa.raspberryapi.spring.dto.GpioPinDto;
+import me.kolpa.raspberryapi.spring.dto.InputPinDto;
 import me.kolpa.raspberrymclib.core.model.OutputPin;
 import me.kolpa.raspberrymclib.core.model.PinState;
+import me.kolpa.raspberrymclib.core.model.TemperatureSensorInputPin;
 import me.kolpa.raspberrymclib.core.repository.UnitOfWork;
+import me.kolpa.raspberrymclib.core.usecases.GetInputPinInteractor;
 import me.kolpa.raspberrymclib.core.usecases.GetOutputPinInteractor;
 import me.kolpa.raspberrymclib.core.usecases.UpdateOutputPinInteractor;
 import me.kolpa.raspberrymclib.core.usecases.exceptions.EntityNotFoundException;
@@ -30,25 +33,29 @@ public class RestController
 
 	private final GetOutputPinInteractor getOutputPinInteractor;
 	private final UpdateOutputPinInteractor updateOutputPinInteractor;
+	private final GetInputPinInteractor getInputPinInteractor;
 	
 	private RestController()
 	{
 		InMemoryUnitOfWorkFactory memoryUnitOfWorkFactory = new InMemoryUnitOfWorkFactory();
 		RaspberryServiceAdapter raspberryServiceAdapter = new RaspberryServiceAdapter(new MockRaspberry());
 		
+		memoryUnitOfWorkFactory.create().temperatureSensors().add(new TemperatureSensorInputPin(6, 24, 30, 20));
+		
 		getOutputPinInteractor = new GetOutputPinInteractor(raspberryServiceAdapter, memoryUnitOfWorkFactory);
 		updateOutputPinInteractor = new UpdateOutputPinInteractor(memoryUnitOfWorkFactory, raspberryServiceAdapter);
+		getInputPinInteractor = new GetInputPinInteractor(memoryUnitOfWorkFactory);
 	}
 
 
 	@GetMapping("/output-pins")
-	public List<GpioPinDto> getAll() throws Exception
+	public List<GpioPinDto> getAllOutput() throws Exception
 	{
 		return getOutputPinInteractor.getAll().stream().map(GpioPinDto::new).collect(Collectors.toList());
 	}
 
 	@GetMapping("/output-pins/{pinId}")
-	public ResponseEntity<GpioPinDto> getById(@PathVariable("pinId") int pinId)
+	public ResponseEntity<GpioPinDto> getOutputById(@PathVariable("pinId") int pinId)
 	{
 		try
 		{
@@ -67,7 +74,7 @@ public class RestController
 	}
 
 	@PutMapping("/output-pins/{pinId}")
-	public ResponseEntity<GpioPinDto> updateById(@PathVariable("pinId") int pinId,  @RequestBody UpdateRequest body)
+	public ResponseEntity<GpioPinDto> updateOutputById(@PathVariable("pinId") int pinId,  @RequestBody UpdateRequest body)
 	{
 		try
 		{
@@ -80,6 +87,25 @@ public class RestController
 		catch (IllegalArgumentException e)
 		{
 			return ResponseEntity.unprocessableEntity().build();
+		}
+	}
+
+	@GetMapping("/input-pins")
+	public List<InputPinDto> getAllInput() throws Exception
+	{
+		return getInputPinInteractor.getAll().stream().map(InputPinDto::new).collect(Collectors.toList());
+	}
+
+	@GetMapping("/input-pins/{pinId}")
+	public ResponseEntity<InputPinDto> getInputById(@PathVariable("pinId") int pinId)
+	{
+		try
+		{
+			return ResponseEntity.ok(new InputPinDto(getInputPinInteractor.getById(pinId)));
+		}
+		catch (EntityNotFoundException e)
+		{
+			return ResponseEntity.notFound().build();
 		}
 	}
 }

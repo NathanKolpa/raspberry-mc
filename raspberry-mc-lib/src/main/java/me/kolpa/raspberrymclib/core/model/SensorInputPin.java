@@ -7,6 +7,6 @@ public abstract class SensorInputPin extends Pin
 		super(pinNumber);
 	}
 	
-	public abstract int getGetInputSignalLevel();
+	public abstract int getInputSignalLevel();
 	public abstract String getName();
 }
