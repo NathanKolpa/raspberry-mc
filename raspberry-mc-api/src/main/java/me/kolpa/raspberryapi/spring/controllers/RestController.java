@@ -83,7 +83,7 @@ public class RestController
 		raspberryServiceAdapter.updateAllOutput();
 	}
 
-	@Scheduled(fixedRate = 250)
+	@Scheduled(fixedRate = 50)
 	public void reportCurrentTime()
 	{
 		raspberryServiceAdapter.pollForUpdates();
