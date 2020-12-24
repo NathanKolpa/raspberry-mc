@@ -56,7 +56,7 @@ public class RestController
 		raspberryServiceAdapter.getOutputPins().add(new OutputPin(4, 0));
 
 		raspberryServiceAdapter.getTemperatureSensors().add(new TemperatureSensorInputPin(7, 20, 25, 20));
-		raspberryServiceAdapter.getButtonSensorInputPins().add(new ButtonSensorInputPin(10, false));
+		raspberryServiceAdapter.getButtonSensorInputPins().add(new ButtonSensorInputPin(6, false));
 
 		getOutputPinInteractor = new GetOutputPinInteractor(raspberryServiceAdapter, memoryUnitOfWorkFactory);
 		updateOutputPinInteractor = new UpdateOutputPinInteractor(memoryUnitOfWorkFactory, raspberryServiceAdapter);

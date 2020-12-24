@@ -3,6 +3,8 @@ package me.kolpa.raspberryapi.impl;
 import com.pi4j.component.temperature.TemperatureSensor;
 import com.pi4j.component.temperature.impl.TmpDS18B20DeviceType;
 import com.pi4j.io.gpio.*;
+import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
+import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 import com.pi4j.io.w1.W1Device;
 import com.pi4j.io.w1.W1Master;
 import com.pi4j.wiringpi.Gpio;
@@ -34,7 +36,21 @@ public class Pi4JRaspberry implements Raspberry
 		this.outputs = outputs;
 		
 		inputs = new ArrayList<>();
-		inputs.add(gpio.provisionDigitalInputPin(RaspiPin.GPIO_10, PinPullResistance.PULL_DOWN));
+		GpioPinDigitalInput gpioPinDigitalInput = gpio.provisionDigitalInputPin(
+				RaspiPin.GPIO_06,
+				PinPullResistance.PULL_DOWN);
+		
+		gpioPinDigitalInput.addListener(new GpioPinListenerDigital()
+		{
+			@Override
+			public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event)
+			{
+				System.out.println(" --> GPIO PIN STATE CHANGE: " + event.getPin() + " = " + event.getState());
+			}
+		});
+		
+		inputs.add(gpioPinDigitalInput);
+
 
 		W1Master master = new W1Master();
 		w1Devices = master.getDevices(TmpDS18B20DeviceType.FAMILY_CODE);
@@ -68,7 +84,7 @@ public class Pi4JRaspberry implements Raspberry
 		{
 			case 7:
 				return (int) (((TemperatureSensor) (w1Devices.stream().findFirst().get())).getTemperature());
-			case 10:
+			case 6:
 				return outputs.stream().findFirst().get().getState().getValue();
 		}
 		
