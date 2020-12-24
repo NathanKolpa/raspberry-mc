@@ -1,5 +1,6 @@
 package me.kolpa.raspberrymclib.impl.service;
 
+import me.kolpa.raspberrymclib.core.model.ButtonSensorInputPin;
 import me.kolpa.raspberrymclib.core.model.OutputPin;
 import me.kolpa.raspberrymclib.core.model.SensorInputPin;
 import me.kolpa.raspberrymclib.core.model.TemperatureSensorInputPin;
@@ -18,6 +19,7 @@ public class RaspberryServiceAdapter implements OutputPinService, InputPinServic
 
 	private final List<OutputPin> outputPins = new ArrayList<>();
 	private final List<TemperatureSensorInputPin> temperatureSensorInputPins = new ArrayList<>();
+	private final List<ButtonSensorInputPin> buttonSensorInputPins = new ArrayList<>();
 
 	public RaspberryServiceAdapter(Raspberry raspberry)
 	{
@@ -39,7 +41,10 @@ public class RaspberryServiceAdapter implements OutputPinService, InputPinServic
 	@Override
 	public List<SensorInputPin> getAllSensors()
 	{
-		return new ArrayList<>(temperatureSensorInputPins);
+		ArrayList<SensorInputPin> sensorInputPins = new ArrayList<>();
+		sensorInputPins.addAll(temperatureSensorInputPins);
+		sensorInputPins.addAll(buttonSensorInputPins);
+		return sensorInputPins;
 	}
 
 	@Override
@@ -61,6 +66,18 @@ public class RaspberryServiceAdapter implements OutputPinService, InputPinServic
 					updateCallback.onUpdate(sensorInputPin);
 			}
 		}
+		
+		for (ButtonSensorInputPin buttonSensorInputPin : buttonSensorInputPins)
+		{
+			boolean value = raspberry.getInput(buttonSensorInputPin.getPinNumber()) != 0;
+			if(value != buttonSensorInputPin.isPressed())
+			{
+				buttonSensorInputPin.setPressed(value);
+
+				if (updateCallback != null)
+					updateCallback.onUpdate(buttonSensorInputPin);
+			}
+		}
 	}
 	
 	public void updateAllOutput()
@@ -79,5 +96,10 @@ public class RaspberryServiceAdapter implements OutputPinService, InputPinServic
 	public List<TemperatureSensorInputPin> getTemperatureSensors()
 	{
 		return temperatureSensorInputPins;
+	}
+
+	public List<ButtonSensorInputPin> getButtonSensorInputPins()
+	{
+		return buttonSensorInputPins;
 	}
 }

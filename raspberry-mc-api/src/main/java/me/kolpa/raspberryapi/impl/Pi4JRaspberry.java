@@ -20,6 +20,7 @@ public class Pi4JRaspberry implements Raspberry
 {
 	final GpioController gpio = GpioFactory.getInstance();
 	final Collection<GpioPinDigitalOutput> outputs;
+	final Collection<GpioPinDigitalInput> inputs;
 	List<W1Device> w1Devices;
 
 
@@ -29,8 +30,10 @@ public class Pi4JRaspberry implements Raspberry
 		outputs.add(gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "GenericPin", com.pi4j.io.gpio.PinState.LOW));
 		outputs.add(gpio.provisionDigitalOutputPin(RaspiPin.GPIO_02, "GenericPin", com.pi4j.io.gpio.PinState.LOW));
 		outputs.add(gpio.provisionDigitalOutputPin(RaspiPin.GPIO_03, "GenericPin", com.pi4j.io.gpio.PinState.LOW));
-
 		this.outputs = outputs;
+		
+		inputs = new ArrayList<>();
+		inputs.add(gpio.provisionDigitalInputPin(RaspiPin.GPIO_10, PinPullResistance.PULL_DOWN));
 
 		W1Master master = new W1Master();
 		w1Devices = master.getDevices(TmpDS18B20DeviceType.FAMILY_CODE);
@@ -55,10 +58,20 @@ public class Pi4JRaspberry implements Raspberry
 		}
 	}
 	
+	
+	
 	@Override
 	public int getInput(int pinNumber)
 	{
-		return (int) (((TemperatureSensor) (w1Devices.stream().findFirst().get())).getTemperature());
+		switch (pinNumber)
+		{
+			case 7:
+				return (int) (((TemperatureSensor) (w1Devices.stream().findFirst().get())).getTemperature());
+			case 10:
+				return outputs.stream().findFirst().get().getState().getValue();
+		}
+		
+		throw new RuntimeException();
 	}
 }
 //newState == PinState.High ? com.pi4j.io.gpio.PinState.HIGH : com.pi4j.io.gpio.PinState.LOW

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.kolpa.raspberryapi.impl.Pi4JRaspberry;
 import me.kolpa.raspberryapi.spring.dto.GpioPinDto;
 import me.kolpa.raspberryapi.spring.dto.InputPinDto;
+import me.kolpa.raspberrymclib.core.model.ButtonSensorInputPin;
 import me.kolpa.raspberrymclib.core.model.OutputPin;
 import me.kolpa.raspberrymclib.core.model.TemperatureSensorInputPin;
 import me.kolpa.raspberrymclib.core.usecases.GetInputPinInteractor;
@@ -52,8 +53,10 @@ public class RestController
 		raspberryServiceAdapter.getOutputPins().add(new OutputPin(1, 0));
 		raspberryServiceAdapter.getOutputPins().add(new OutputPin(2, 0));
 		raspberryServiceAdapter.getOutputPins().add(new OutputPin(3, 0));
+		raspberryServiceAdapter.getOutputPins().add(new OutputPin(4, 0));
 
 		raspberryServiceAdapter.getTemperatureSensors().add(new TemperatureSensorInputPin(7, 20, 25, 20));
+		raspberryServiceAdapter.getButtonSensorInputPins().add(new ButtonSensorInputPin(10, false));
 
 		getOutputPinInteractor = new GetOutputPinInteractor(raspberryServiceAdapter, memoryUnitOfWorkFactory);
 		updateOutputPinInteractor = new UpdateOutputPinInteractor(memoryUnitOfWorkFactory, raspberryServiceAdapter);
