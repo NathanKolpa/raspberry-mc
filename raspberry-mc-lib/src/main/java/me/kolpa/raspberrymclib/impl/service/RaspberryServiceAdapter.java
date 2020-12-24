@@ -70,6 +70,7 @@ public class RaspberryServiceAdapter implements OutputPinService, InputPinServic
 		for (ButtonSensorInputPin buttonSensorInputPin : buttonSensorInputPins)
 		{
 			boolean value = raspberry.getInput(buttonSensorInputPin.getPinNumber()) != 0;
+			System.out.println(value);
 			if(value != buttonSensorInputPin.isPressed())
 			{
 				buttonSensorInputPin.setPressed(value);

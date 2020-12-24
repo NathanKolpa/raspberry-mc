@@ -47,7 +47,6 @@ public class Pi4JRaspberry implements Raspberry
 			public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event)
 			{
 				pin6State = event.getState().isHigh();
-				System.out.println(" --> GPIO PIN STATE CHANGE: " + event.getPin() + " = " + event.getState());
 			}
 		});
 		
