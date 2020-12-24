@@ -30,6 +30,7 @@ public class Pi4JRaspberry implements Raspberry
 		outputs.add(gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "GenericPin", com.pi4j.io.gpio.PinState.LOW));
 		outputs.add(gpio.provisionDigitalOutputPin(RaspiPin.GPIO_02, "GenericPin", com.pi4j.io.gpio.PinState.LOW));
 		outputs.add(gpio.provisionDigitalOutputPin(RaspiPin.GPIO_03, "GenericPin", com.pi4j.io.gpio.PinState.LOW));
+		outputs.add(gpio.provisionDigitalOutputPin(RaspiPin.GPIO_04, "GenericPin", com.pi4j.io.gpio.PinState.LOW));
 		this.outputs = outputs;
 		
 		inputs = new ArrayList<>();
