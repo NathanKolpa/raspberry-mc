@@ -48,7 +48,6 @@ public abstract class InputPinStructure extends PinStructure
 		valueField.setValue(value);
 	}
 
-	public abstract void update();
 
 	public BlockPosition getBlockPosition()
 	{

@@ -1,5 +1,6 @@
 package me.kolpa.raspberrymcspigot;
 
+import me.kolpa.raspberrymcspigot.core.structure.InputPinStructure;
 import me.kolpa.raspberrymcspigot.core.usecases.*;
 import me.kolpa.raspberrymcspigot.impl.raspberry.RemoteRaspberry;
 import me.kolpa.raspberrymcspigot.impl.repository.file.FileUnitOfWorkFactory;

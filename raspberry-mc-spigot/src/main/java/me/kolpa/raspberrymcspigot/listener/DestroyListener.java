@@ -21,7 +21,9 @@ public class DestroyListener implements Listener
 	@EventHandler
 	private void onBlockBreak(BlockBreakEvent event)
 	{
-		if(event.getBlock().getType() != Material.REDSTONE_LAMP && !Tag.SIGNS.isTagged(event.getBlock().getType()))
+		if (event.getBlock().getType() != Material.REDSTONE_LAMP && event.getBlock()
+				.getType() != Material.GOLD_BLOCK && event.getBlock()
+				.getType() != Material.REDSTONE_WIRE && !Tag.SIGNS.isTagged(event.getBlock().getType()))
 			return;
 
 		Block block = event.getBlock();

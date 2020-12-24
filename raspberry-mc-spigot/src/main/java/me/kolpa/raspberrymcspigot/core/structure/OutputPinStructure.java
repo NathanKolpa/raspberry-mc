@@ -31,8 +31,6 @@ public abstract class OutputPinStructure extends PinStructure
 		powerField.setValue(power + "");
 	}
 	
-	public abstract void update();
-
 	public BlockPosition getBlockPosition()
 	{
 		return blockPosition;

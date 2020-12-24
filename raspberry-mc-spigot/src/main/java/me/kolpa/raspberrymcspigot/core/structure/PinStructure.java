@@ -77,4 +77,6 @@ public abstract class PinStructure
 
 	public abstract boolean containsBlock(BlockPosition position);
 
+	public abstract void update();
+
 }
