@@ -24,7 +24,8 @@ public class Pi4JRaspberry implements Raspberry
 	final Collection<GpioPinDigitalOutput> outputs;
 	final Collection<GpioPinDigitalInput> inputs;
 	List<W1Device> w1Devices;
-
+	
+	boolean pin6State = false;
 
 	public Pi4JRaspberry()
 	{
@@ -45,6 +46,7 @@ public class Pi4JRaspberry implements Raspberry
 			@Override
 			public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event)
 			{
+				pin6State = event.getState().isHigh();
 				System.out.println(" --> GPIO PIN STATE CHANGE: " + event.getPin() + " = " + event.getState());
 			}
 		});
@@ -85,7 +87,7 @@ public class Pi4JRaspberry implements Raspberry
 			case 7:
 				return (int) (((TemperatureSensor) (w1Devices.stream().findFirst().get())).getTemperature());
 			case 6:
-				return outputs.stream().findFirst().get().getState().getValue();
+				return pin6State ? 1 : 0;
 		}
 		
 		throw new RuntimeException();
